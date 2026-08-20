@@ -17,14 +17,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ========== SECURITY ==========
 # ⚠️ Lưu ý: khi triển khai production, SECRET_KEY nên được lấy từ biến môi trường
-SECRET_KEY = 'django-insecure-@!r_*+k5vo0@)ihr40l8^)ze#c6w^kfb$3#7i5h(kzbj5b6adz'
+# ==========================================================
+# SECURITY
+# ==========================================================
 
-DEBUG = False
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-dev-only-change-this"
+)
+
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost'
-    
+    host.strip()
+    for host in os.environ.get(
+        "ALLOWED_HOSTS",
+        "127.0.0.1,localhost"
+    ).split(",")
+    if host.strip()
 ]
 
 
@@ -48,6 +58,7 @@ INSTALLED_APPS = [
 # ========== MIDDLEWARE ==========
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -92,11 +103,13 @@ TEMPLATES = [
 
 
 # ========== DATABASE ==========
+import dj_database_url
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+    )
 }
 
 
@@ -125,14 +138,25 @@ LANGUAGES = [
 
 
 # ========== STATIC & MEDIA ==========
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 # ========== CKEDITOR ==========
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_CONFIGS = {

@@ -15,3 +15,10 @@ ALLOWED_HOSTS = [
     'ttytkvthoilai.pythonanywhere.com',
     'www.ttytkvthoilai.pythonanywhere.com',
 ]
+##Từ giờ mỗi khi bạn sửa code, chỉ cần:
+git add .
+git commit -m "Cap nhat project"
+git push
+
+#Nếu muốn kiểm tra trạng thái:
+git status
