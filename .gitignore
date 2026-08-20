@@ -26,9 +26,11 @@ Thumbs.db
 # Logs
 *.log
 
-# Static / media nếu không muốn đưa file lên GitHub
+# Static
 staticfiles/
-media/
+
+# Media - đưa ảnh lên GitHub
+# media/
 
 # Python cache
 .pytest_cache/

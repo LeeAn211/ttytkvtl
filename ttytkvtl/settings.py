@@ -138,6 +138,9 @@ LANGUAGES = [
 
 
 # ========== STATIC & MEDIA ==========
+
+# ========== STATIC & MEDIA ==========
+
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
