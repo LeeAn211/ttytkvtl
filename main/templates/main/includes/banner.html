@@ -1,0 +1,38 @@
+{% load static %}
+{% if banners %}
+<div class="container px-0">   {# << thêm dòng này #}
+  <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+
+    <div class="carousel-indicators">
+      {% for banner in banners %}
+        <a       
+                data-bs-slide-to="{{ forloop.counter0 }}"
+                {% if forloop.first %}class="active" aria-current="true"{% endif %}
+                aria-label="Slide {{ forloop.counter }}">
+    </a>
+      {% endfor %}
+    </div>
+
+    <div class="carousel-inner">
+      {% for banner in banners %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          {% if banner.url %}
+            <a href="{{ banner.url }}">
+              <img src="{{ banner.image.url }}" class="d-block w-100"
+                   alt="{{ banner.title|default:'Banner' }}">
+            </a>
+          {% else %}
+            <img src="{{ banner.image.url }}" class="d-block w-100"
+                 alt="{{ banner.title|default:'Banner' }}">
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+  
+
+  </div>
+</div>                        {# << đóng container #}
+{% else %}
+<p class="text-muted text-center">Chưa có banner nào được hiển thị.</p>
+{% endif %}

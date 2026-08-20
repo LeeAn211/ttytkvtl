@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Giới thiệu{% endblock %}
+
+{% block content %}
+<div class="container my-2">
+  <div class="row g-2">
+
+    <!-- 🟠 SIDEBAR TRÁI -->
+    <aside class="col-md-3">
+      {% include 'main/includes/sidebar-left.html' %}
+    </aside>
+
+    <!-- 🟡 NỘI DUNG GIỚI THIỆU -->
+    <section class="col-md-6">
+      <div class="mb-3 p-4 border rounded shadow-sm bg-white">
+        <h2 class="fw-bold text-primary text-center mb-4">Giới thiệu Trung tâm Y tế KV Thới Lai</h2>
+
+        <p>
+          Trung tâm Y tế khu vực Thới Lai được thành lập nhằm đáp ứng nhu cầu chăm sóc sức khoẻ 
+          ngày càng cao của người dân. Chúng tôi cung cấp đầy đủ các dịch vụ khám chữa bệnh, 
+          phòng bệnh và nâng cao sức khoẻ cộng đồng.
+        </p>
+
+        <h5 class="fw-bold mt-4">Sứ mệnh</h5>
+        <p>
+          Cung cấp dịch vụ y tế chất lượng cao, an toàn, hiệu quả, lấy người bệnh làm trung tâm.
+        </p>
+
+        <h5 class="fw-bold mt-4">Tầm nhìn</h5>
+        <p>
+          Trở thành một trong những cơ sở y tế uy tín hàng đầu khu vực, góp phần nâng cao sức khỏe cộng đồng.
+        </p>
+
+
+       
+      </div>
+    </section>
+
+    <!-- 🟣 SIDEBAR PHẢI -->
+    <aside class="col-md-3">
+      {% include 'main/includes/sidebar-right.html' %}
+
+     
+    </aside>
+
+  </div>
+</div>
+{% endblock %}

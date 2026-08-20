@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sơ đồ tổ chức{% endblock %}
+
+{% block content %}
+<div class="container my-2">
+  <div class="row g-4">
+
+    <!-- 🟠 SIDEBAR TRÁI -->
+    <aside class="col-md-3">
+      {% include 'main/includes/sidebar-left.html' %}
+    </aside>
+
+    <!-- 🟡 NỘI DUNG SƠ ĐỒ -->
+    <section class="col-md-6">
+      <div class="mb-3 p-4 border rounded shadow-sm bg-white">
+        <h2 class="fw-bold text-primary mb-4 text-center">Sơ đồ tổ chức & Mục lục thông tin</h2>
+
+        <!-- Danh sách dạng cây -->
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item fw-bold">Giới thiệu</li>
+          <li class="list-group-item fw-bold">Cơ cấu tổ chức</li>
+          <li class="list-group-item fw-bold">Tin tức – Sự kiện</li>
+          <li class="list-group-item fw-bold">Lịch làm việc</li>
+          <li class="list-group-item fw-bold">Văn bản pháp luật</li>
+          <li class="list-group-item fw-bold">ISO 9001:2008</li>
+
+          <li class="list-group-item fw-bold">Thông tin chuyên ngành</li>
+          <li class="list-group-item fw-bold">Thông tin cần biết</li>
+          <li class="list-group-item ms-3">An toàn sinh học</li>
+
+          <li class="list-group-item fw-bold">Đơn vị trực thuộc</li>
+          <li class="list-group-item fw-bold">Quản lý hành nghề Y – Dược</li>
+          <li class="list-group-item fw-bold">Đường dây nóng</li>
+
+          <li class="list-group-item fw-bold">Tài liệu truyền thông</li>
+          <li class="list-group-item fw-bold">Lịch sử ngành Y Tế</li>
+          <li class="list-group-item fw-bold">Tập Hồi ký</li>
+          <li class="list-group-item fw-bold">Văn học nghệ thuật</li>
+
+          <li class="list-group-item fw-bold">Mua sắm Thuốc – Hóa chất, vật tư</li>
+          <li class="list-group-item fw-bold">Cải cách hành chính</li>
+          <li class="list-group-item fw-bold">An toàn thực phẩm</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 🟣 SIDEBAR PHẢI -->
+    <aside class="col-md-3">
+      {% include 'main/includes/sidebar-right.html' %}
+      <div class="stat-box mt-3">
+        <h6 class="stat-title">👀 Thống kê truy cập</h6>
+        <div class="stat-content">
+          <p>Hôm nay: <strong>{{ today_views }}</strong> lượt</p>
+          <p>Tổng cộng: <strong>{{ total_views }}</strong> lượt</p>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</div>
+{% endblock %}

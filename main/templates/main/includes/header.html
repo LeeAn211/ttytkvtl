@@ -1,0 +1,74 @@
+{% load static %}
+{% load vi_datetime %}
+
+<!-- CSS -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
+  <div class="container">
+
+    <!-- Nút toggle cho mobile -->
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+
+      {# 🕒 Ngày giờ hiện tại #}
+      <span class="top-date text-light me-4 fw-bold">
+        {{ now|thu_viet }}
+      </span>
+
+      {# 📋 Menu chính #}
+      <ul class="navbar-nav me-auto">
+
+        <!-- Link Trang chủ -->
+        <li class="nav-item">
+          <!--- <a class="nav-link fw-bold" href="{% url 'home' %}">📋</a> -->
+          
+        </li>
+         
+        <!-- Menu động từ database -->
+        {% for item in menu_items %}
+          {% with item.children.all as children %}
+            {% if children %}
+              <!-- Có menu con -->
+              <li class="nav-item  dropdown">
+                <a class="nav-link dropdown-toggle fw-bold"
+                   href="{{ item.get_absolute_url }}"
+                   id="dropdownMenu{{ forloop.counter }}"
+                   role="button"
+                   data-bs-toggle="dropdown"
+                   aria-expanded="false">
+                  {{ item.name }}
+                </a>
+                <ul class="dropdown-menu " aria-labelledby="dropdownMenu{{ forloop.counter }}">
+                  {% for child in children %}
+                    <li>
+                      <a class="dropdown-item" href="{{ child.get_absolute_url }}">
+                        {{ child.name }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </li>
+            {% else %}
+              <!-- Không có menu con -->
+              <li class="nav-item">
+                <a class="nav-link fw-bold" href="{{ item.get_absolute_url }}">
+                  {{ item.name }}
+                </a>
+                 
+              </li>
+            {% endif %}
+          {% endwith %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</nav>

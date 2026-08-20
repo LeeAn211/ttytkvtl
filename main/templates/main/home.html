@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Trang chủ{% endblock %}
+
+{% block content %}
+<div class="container my-2">
+  
+  <div class="row g-2">
+    <!-- 🟠 SIDEBAR TRÁI -->
+    <aside class="col-md-3">
+      {% include 'main/includes/sidebar-left.html' %}
+    </aside>
+
+    <!-- 🟢 NỘI DUNG CHÍNH -->
+    <section class="col-md-6">
+    {% block breadcrumb %}{% endblock %}
+      {# ========== TIN NỔI BẬT ========== #}
+      {% if top_articles %}
+      <div class="mb-2 p-3 border rounded shadow-sm bg-white">
+        <h5 class="section-title text-primary fw-bold mb-3">Tin nổi bật</h5>
+        <div class="row g-2">
+
+          <!-- Tin chính -->
+          <div class="col-md-6">
+            {% with top=top_articles.0 %}
+              <a href="{% url 'article_detail' slug=top.slug %}">
+                {% if top.image %}
+                  <img src="{{ top.image.url }}" class="img-fluid rounded mb-2" alt="{{ top.title }}">
+                {% endif %}
+              </a>
+              <h6 class="fw-bold text-justify">
+                <a href="{% url 'article_detail' slug=top.slug %}" class="text-decoration-none text-primary">
+                  {{ top.title }}
+                </a>
+              </h6>
+              <small class="text-muted">
+                <i class="bi bi-clock me-1 small"></i> ({{ top.created_at|date:"d/m/Y H:i" }})
+              </small>
+            {% endwith %}
+          </div>
+
+          <!-- Danh sách phụ -->
+          <div class="col-md-6">
+            <ul class="list-unstyled">
+              {% for article in top_articles|slice:"1:5" %}
+              <li class="d-flex mb-2 align-items-center">
+                {% if article.image %}
+                <div class="flex-shrink-0 me-2" style="width:60px;height:60px;">
+                  <a href="{% url 'article_detail' slug=article.slug %}">
+                    <img src="{{ article.image.url }}" class="img-fluid rounded" alt="{{ article.title }}">
+                  </a>
+                </div>
+                {% endif %}
+                <div class="flex-grow-1 small text-break text-justify">
+                  <a href="{% url 'article_detail' slug=article.slug %}" class="text-dark text-decoration-none">
+                    <span class="text-primary">■</span> {{ article.title|truncatewords:15|safe }}
+                  </a>
+                  <small class="text-muted d-block">
+                    <i class="bi bi-clock me-1 small"></i> ({{ article.created_at|date:"d/m/Y H:i" }})
+                  </small>
+                </div>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      {# ========== DANH MỤC BÀI VIẾT ========== #}
+      {% for category in categories %}
+      <div class="mb-2 p-3 border rounded shadow-sm bg-white">
+        <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+          <h5 class="section-title text-primary fw-bold mb-0">{{ category.name }}</h5>
+          <a href="{% url 'category_articles' slug=category.slug %}" class="btn btn-sm fw-bold btn-outline-3366cc">
+            Xem tất cả
+          </a>
+        </div>
+
+        <div class="row g-2">
+          <!-- Bài viết lớn bên trái -->
+          <div class="col-md-5">
+            {% with first_post=category.articles.first %}
+              {% if first_post %}
+                <a href="{% url 'article_detail' slug=first_post.slug %}">
+                  {% if first_post.image %}
+                    <img src="{{ first_post.image.url }}" class="img-fluid rounded mb-2" alt="{{ first_post.title }}">
+                  {% endif %}
+                </a>
+                <h6 class="fw-bold text-justify">
+                  <a href="{% url 'article_detail' slug=first_post.slug %}" class="text-primary text-decoration-none">
+                    {{ first_post.title }}
+                  </a>
+                </h6>
+                <small class="text-muted">
+                  <i class="bi bi-clock me-1 small"></i> ({{ first_post.created_at|date:"d/m/Y H:i" }})
+                </small>
+              {% endif %}
+            {% endwith %}
+          </div>
+
+          <!-- Danh sách phụ bên phải -->
+          <div class="col-md-7">
+            <ul class="list-unstyled">
+              {% for article in category.articles.all|slice:"1:6" %}
+              <li class="d-flex mb-2 align-items-center">
+                {% if article.image %}
+                <div class="flex-shrink-0 me-2" style="width:60px;">
+                  <a href="{% url 'article_detail' slug=article.slug %}">
+                    <img src="{{ article.image.url }}" class="img-fluid rounded" alt="{{ article.title }}">
+                  </a>
+                </div>
+                {% endif %}
+                <div class="flex-grow-1 small text-break text-justify">
+                  <a href="{% url 'article_detail' slug=article.slug %}" class="text-dark text-decoration-none">
+                    <span class="text-primary">■</span> {{ article.title|truncatewords:15|safe }}
+                  </a>
+                  <small class="text-muted d-block">
+                    <i class="bi bi-clock me-1 small"></i> ({{ article.created_at|date:"d/m/Y H:i" }})
+                  </small>
+                </div>
+              </li>
+              {% empty %}
+              <li class="text-muted">Chưa có bài viết.</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </section>
+
+    <!-- 🟣 SIDEBAR PHẢI -->
+    <aside class="col-md-3">
+      {% include 'main/includes/sidebar-right.html' %}
+    </aside>
+  </div>
+</div>
+{% endblock %}

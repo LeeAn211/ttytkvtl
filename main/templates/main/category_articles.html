@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+{% load text_filters %}
+
+{% block title %}{{ category.name }} - Chủ đề{% endblock %}
+
+
+
+{% block content %}
+<div class="container my-2">
+  <div class="row g-2">
+
+    <!-- 🟠 SIDEBAR TRÁI -->
+    <aside class="col-md-3">
+      {% include 'main/includes/sidebar-left.html' %}
+    </aside>
+
+    <!-- 🟢 NỘI DUNG CHÍNH -->
+    <section class="col-md-6">
+      
+          {% block breadcrumb %}
+             <nav class="breadcrumb-nav mb-2">
+          <a href="{% url 'home' %}">Trang chủ</a> ▶
+          <span>{{ category.name }}</span>
+             </nav>
+          {% endblock %}
+    
+      {% if page_obj %}
+        {% for article in page_obj %}
+          <article class="mb-3 p-3 border rounded shadow-sm bg-white">
+            <h4 class="fw-bold text-break mb-2 text-justify">
+              <a href="{% url 'article_detail' slug=article.slug %}" class="text-decoration-none text-primary">
+                {{ article.title }}
+              </a>
+            </h4>
+
+            {% if article.image %}
+              <div class="text-center mb-2">
+                <a href="{% url 'article_detail' slug=article.slug %}">
+                  <img src="{{ article.image.url }}" alt="{{ article.title }}" class="img-fluid rounded" loading="lazy">
+                </a>
+              </div>
+            {% endif %}
+
+            <p class="text-muted mb-2">
+               {# Quan trọng: loại bỏ thẻ HTML từ content để tránh thẻ chưa đóng phá layout #}
+               {{ article.content|striptags|html_unescape|truncatewords:50 }}
+            </p>
+
+            <a href="{% url 'article_detail' slug=article.slug %}" class="btn btn-sm btn-primary">
+               Xem chi tiết
+            </a>
+          </article>
+        {% endfor %}
+
+        {# phân trang (giữ include hiện tại) #}
+        {% include "main/includes/pagination.html" with page_obj=page_obj %}
+
+      {% else %}
+        <div class="alert alert-info mb-0">
+          Chưa có bài viết nào trong chủ đề này.
+        </div>
+      {% endif %}
+    </section>
+
+    <!-- 🟣 SIDEBAR PHẢI -->
+    <aside class="col-md-3">
+      {% include 'main/includes/sidebar-right.html' %}
+    </aside>
+
+  </div>
+</div>
+{% endblock %}

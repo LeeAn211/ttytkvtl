@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Liên hệ{% endblock %}
+
+{% block content %}
+<div class="container my-2">
+  <div class="row g-2">
+
+    <!-- 🟠 SIDEBAR TRÁI -->
+    <aside class="col-md-3">
+      {% include 'main/includes/sidebar-left.html' %}
+    </aside>
+
+    <!-- 🟡 NỘI DUNG CHÍNH -->
+    <section class="col-md-6">
+      <div class="mb-2 p-3 border rounded shadow-sm bg-white">
+        <div class="card-body">
+          <h5 class="fw-bold mb-3">{{ contact.title }}</h5>
+            <p class="mb-2"><i class="bi bi-geo-alt text-primary me-2"></i>Địa chỉ: {{ contact.address }}</p>
+            <p class="mb-2"><i class="bi bi-telephone text-primary me-2"></i>Điện thoại: {{ contact.phone }}</p>
+            <p class="mb-2"><i class="bi bi-envelope text-primary me-2"></i>Email: {{ contact.email }}</p>
+            <p class="mb-0"><i class="bi bi-clock text-primary me-2"></i>Giờ làm việc: {{ contact.working_hours }}</p>
+        </div>
+      </div>
+
+      <!-- Google Maps -->
+      <div class="mt-4">
+        <h5 class="fw-bold mb-3">Bản đồ</h5>
+        <div class="ratio ratio-16x9">
+         {{ contact.map_iframe|safe }}
+        </div>
+      </div>
+    </section>
+
+    <!-- 🟣 SIDEBAR PHẢI -->
+    <aside class="col-md-3">
+      {% include 'main/includes/sidebar-right.html' %}
+      
+    </aside>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v={{ now|date:'U' }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<div class="sidebar left-sidebar">
+  {% for sidebar in left_sidebars %}
+    <div class="sidebar-box mb-2">
+
+      {# --- Tiêu đề Sidebar --- #}
+      {% if sidebar.title %}
+        <div class="sidebar-title mb-2 fw-bold">{{ sidebar.title }}</div>
+      {% endif %}
+
+      {# --- Hình đại diện Sidebar --- #}
+      {% if sidebar.image %}
+        <div class="sidebar-image text-center mb-2">
+          {% if sidebar.url %}
+            <a href="{{ sidebar.url }}">
+              <img src="{{ sidebar.image.url }}" alt="{{ sidebar.title }}" class="img-fluid sidebar-img rounded shadow-sm">
+            </a>
+          {% else %}
+            <img src="{{ sidebar.image.url }}" alt="{{ sidebar.title }}" class="img-fluid sidebar-img rounded shadow-sm">
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {# --- Bài viết chính (không thuộc mục con) --- #}
+      {% if sidebar.get_main_posts %}
+        <div class="sidebar-main-posts mb-0">
+          {% for post in sidebar.get_main_posts %}
+            <div class="sidebar-main-post sidebar-html-content mb-0">
+              {{ post.content|safe }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {# --- Danh sách mục con + bài viết trong từng mục con --- #}
+      {% if sidebar.items.exists %}
+        <ul class="sidebar-subitems list-unstyled mb-0">
+          {% for item in sidebar.items.all %}
+            <li class="sidebar-subitem mb-0">
+              <div class="sidebar-subitem-title fw-bold text-primary">
+
+                {% if item.posts.count > 1 %}
+                  {# 👉 2 bài trở lên: chỉ hiện tên mục con, không link #}
+                  <a class="text-decoration-none text-primary">
+                    <i class="fa-solid fa-angle-right me-1 text-primary"></i> {{ item.title }}
+                  </a>
+                {% else %}
+                  {# 👉 Chỉ 1 bài: link trực tiếp tới bài viết #}
+                  {% with only_post=item.posts.first %}
+                    <a href="{{ only_post.get_absolute_url }}" class="text-decoration-none text-primary">
+                      <i class="fa-solid fa-angle-right me-1 text-primary"></i> {{ item.title }}
+                    </a>
+                  {% endwith %}
+                {% endif %}
+
+              </div>
+
+              {% if item.posts.count > 1 %}
+                <ul class="list-unstyled">
+                  {% for post in item.posts.all %}
+                    <li class="sidebar-child-post mb-1">
+                      <a href="{{ post.get_absolute_url }}" class="text-decoration-none text-primary">
+                        <i class="fa-regular fa-circle-dot me-1 text-primary"></i> {{ post.title }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+    </div>  {# ✅ đóng .sidebar-box ngay cuối mỗi lần lặp #}
+
+  {% empty %}
+    <p class="text-muted">Chưa có sidebar nào được thêm.</p>
+  {% endfor %}
+</div>

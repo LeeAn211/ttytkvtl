@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="container my-2">
+  <div class="row g-2">
+
+    <!-- 🟠 SIDEBAR TRÁI -->
+    <aside class="col-md-3">
+      {% include 'main/includes/sidebar-left.html' %}
+    </aside>
+
+    <!-- 🟢 NỘI DUNG BÀI VIẾT -->
+    <article class="col-md-6">
+
+       {% block breadcrumb %}
+<nav class="breadcrumb-nav mb-2 text-primary text-justify">
+  <a href="{% url 'home' %}">Trang chủ</a> ▶
+  
+    <span>{{ post.sidebar.title }}</span>
+
+
+  {% if post.item %}
+     ▶ <span>{{ post.item.title }}</span>
+      ▶<span>{{ post.title }}</span>
+  {% endif %}
+</nav>
+{% endblock %}
+      
+     
+      <div class="p-3 border rounded bg-white shadow-sm">
+
+        <!-- Tiêu đề -->
+        <h2 class="text-primary fw-bold mb-3 text-justify">{{ post.title }}</h2>
+
+        <!-- Thông tin meta -->
+        <div class="text-muted  small mb-3">
+          <i class="bi bi-clock me-1 small"></i>{{ post.created_at|date:"d/m/Y H:i" }}
+        </div>
+
+        <!-- Ảnh minh họa -->
+        {% if post.image %}
+          <div class="mb-3 text-center">
+            <img src="{{ post.image.url }}" class="img-fluid rounded shadow-sm" alt="{{ post.title }}">
+          </div>
+        {% endif %}
+
+        <!-- Nội dung -->
+        <div class="article-content mb-4">
+          {{ post.content|safe }}
+        </div>
+
+        <!-- Tệp đính kèm -->
+        {% if post.attachment %}
+          <section class="mt-4 p-3 border rounded bg-light">
+            <h6 class="fw-bold">📎 Tệp đính kèm</h6>
+            <p class="mb-2">
+              <strong>{{ post.attachment.name|slice:"9:" }}</strong>
+            </p>
+            <a href="{{ post.attachment.url }}" class="btn btn-sm btn-outline-primary me-2" target="_blank">
+              🔗 Mở tệp
+            </a>
+            <a href="{{ post.attachment.url }}" class="btn btn-sm btn-outline-success" download>
+              ⬇ Tải xuống
+            </a>
+          </section>
+        {% endif %}
+
+      </div>
+    </article>
+
+    <!-- 🟣 SIDEBAR PHẢI -->
+    <aside class="col-md-3">
+      {% include 'main/includes/sidebar-right.html' %}
+
+      <!-- 👀 Thống kê truy cập -->
+    
+    </aside>
+
+  </div>
+</div>
+{% endblock %}

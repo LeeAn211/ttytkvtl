@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    {% if menu_item %}
+        {{ menu_item.name }}
+    {% else %}
+        Danh sách bài viết
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container my-2">
+  <div class="row g-2">
+
+    <!-- 🟠 SIDEBAR TRÁI -->
+    <aside class="col-md-3">
+      {% include 'main/includes/sidebar-left.html' %}
+    </aside>
+
+    <!-- 🟢 DANH SÁCH BÀI VIẾT -->
+    <section class="col-md-6">
+
+      {% if menu_item %}
+        <h4 class="text-primary fw-bold mb-3">
+          📂 {{ menu_item.name }}
+        </h4>
+      {% endif %}
+
+      {% if page_obj %}
+        {% for article in page_obj %}
+          <article class="mb-4 p-3 border rounded bg-light">
+            <h5 class="fw-bold mb-2 text-justify">
+              <a href="{{ article.get_absolute_url }}" class="text-decoration-none text-primary text-justify">
+                {{ article.title }}
+              </a>
+            </h5>
+
+            {% if article.summary %}
+              <p class="mb-0 text-muted">
+                {{ article.summary|truncatewords:30|safe }}
+              </p>
+            {% endif %}
+          </article>
+        {% endfor %}
+
+        {# ✅ PHÂN TRANG #}
+        {% include "main/includes/pagination.html" with page_obj=page_obj %}
+
+      {% else %}
+        <p class="text-muted">Chưa có bài viết nào trong mục này.</p>
+      {% endif %}
+
+    </section>
+
+    <!-- 🟣 SIDEBAR PHẢI -->
+    <aside class="col-md-3">
+      {% include 'main/includes/sidebar-right.html' %}
+    </aside>
+
+  </div>
+</div>
+{% endblock %}

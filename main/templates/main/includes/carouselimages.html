@@ -1,0 +1,28 @@
+<div id="introCarousel" class="carousel slide mb-2" data-bs-ride="carousel" data-bs-interval="5000">
+
+  <div class="carousel-indicators">
+    {% for img in carousel_images %}
+      <button type="button"
+              data-bs-target="#introCarousel"
+              data-bs-slide-to="{{ forloop.counter0 }}"
+              class="{% if forloop.first %}active{% endif %}"
+              aria-label="Slide {{ forloop.counter }}"></button>
+    {% endfor %}
+  </div>
+
+  <div class="carousel-inner">
+    {% for img in carousel_images %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <img src="{{ img.image.url }}" class="d-block w-100" alt="{{ img.title }}">
+        {% if img.title or img.caption %}
+        <div class="carousel-caption d-none d-md-block">
+         
+          {% if img.caption %}<p>{{ img.caption }}</p>{% endif %}
+        </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+  
+</div>

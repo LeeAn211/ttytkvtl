@@ -1,0 +1,17 @@
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+python manage.py collectstatic
+
+
+# ========== SECURITY ==========
+# ⚠️ Lưu ý: khi triển khai production, SECRET_KEY nên được lấy từ biến môi trường
+SECRET_KEY = 'django-insecure-@!r_*+k5vo0@)ihr40l8^)ze#c6w^kfb$3#7i5h(kzbj5b6adz'
+
+DEBUG = False
+
+ALLOWED_HOSTS = [
+    'ttytkvthoilai.pythonanywhere.com',
+    'www.ttytkvthoilai.pythonanywhere.com',
+]

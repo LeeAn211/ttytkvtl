@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load humanize custom_filters %}
+
+{% block title %}Danh sách Dịch vụ{% endblock %}
+
+{% block content %}
+<div class="container my-2">
+  <h2 class="mb-4 text-center fw-bold text-primary">BẢNG GIÁ KHÁM CHỮA BỆNH TẠI TTYT KHU VỰC THỚI LAI</h2>
+
+  <!-- 🔍 Form tìm kiếm -->
+  <form method="get" class="row g-2 justify-content-center mb-4">
+    <div class="col-md-6">
+      <input type="text" name="q" value="{{ q }}" class="form-control form-control-lg"
+             placeholder="🔎 Nhập tên bạn cần tìm...">
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-lg btn-primary px-4">Tìm kiếm</button>
+    </div>
+  </form>
+
+  <h6 class="text-end text-danger fw-semibold">ĐVT: VNĐ</h6>
+
+  <!-- Bảng -->
+  <div class="table-responsive shadow rounded">
+    <table class="table table-hover table-striped table-bordered table-sm align-middle mb-0">
+      <thead class="table-primary text-center">
+        <tr>
+          <th>STT</th>
+          <th>Mã tương đương</th>
+          <th>Tên Dịch Vụ</th>
+          <th>Giá BHYT</th>
+          <th>Giá không BHYT</th>
+          <th>Ghi chú</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in page_obj %}
+        <tr>
+          <td class="text-center ">{{ s.order }}</td>
+          <td class="text-center">{{ s.code }}</td>
+          <td class="text-start ">{{ s.name }}</td>
+          <td class="text-end text-success fw-semibold">{{ s.price_bhyt|intdot }}</td>
+          <td class="text-end text-danger fw-semibold">{{ s.price_non_bhyt|intdot }}</td>
+          <td class="text-start">{{ s.description }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-center text-muted py-4">Chưa có dịch vụ</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 🔹 Phân trang -->
+  {% if page_obj.paginator.num_pages > 1 %}
+  <nav class="mt-4">
+    <ul class="pagination justify-content-center">
+
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?q={{ q }}&page={{ page_obj.previous_page_number }}">« Trước</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">« Trước</span></li>
+      {% endif %}
+
+      {# ✅ dải trang rút gọn – không dùng elif #}
+      {% for num in page_obj.paginator.page_range %}
+        {% if num == 1 or num == page_obj.paginator.num_pages %}
+          <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+            <a class="page-link" href="?q={{ q }}&page={{ num }}">{{ num }}</a>
+          </li>
+        {% else %}
+          {% if num|add:'-2' <= page_obj.number and page_obj.number <= num|add:'2' %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+              <a class="page-link" href="?q={{ q }}&page={{ num }}">{{ num }}</a>
+            </li>
+          {% else %}
+            {% if num == 2 or num == page_obj.paginator.num_pages|add:'-1' %}
+              <li class="page-item disabled"><span class="page-link">…</span></li>
+            {% endif %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?q={{ q }}&page={{ page_obj.next_page_number }}">Sau »</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">Sau »</span></li>
+      {% endif %}
+
+    </ul>
+  </nav>
+  {% endif %}
+
+</div>
+{% endblock %}

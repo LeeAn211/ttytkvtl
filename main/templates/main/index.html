@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Trang chủ{% endblock %}
+
+{% block content %}
+<div class="container my-2">
+  <div class="row g-2">
+
+    <!-- 🟠 SIDEBAR TRÁI -->
+    <aside class="col-md-3">
+      {% include 'main/includes/sidebar-left.html' %}
+    </aside>
+
+    <!-- 🟢 DANH SÁCH BÀI VIẾT -->
+    <section class="col-md-6">
+      {% for article in articles %}
+        <article class="mb-2 p-3 border rounded bg-light">
+          {% if article.image %}
+            <img src="{{ article.image.url }}" class="img-fluid mb-2" alt="{{ article.title }}">
+          {% endif %}
+
+          <h5 class="fw-bold">
+            <a href="{% url 'article_detail' article.slug %}" class="text-decoration-none text-dark">
+              {{ article.title }}
+            </a>
+          </h5>
+
+          <div class="small text-break">
+            {{ article.content|truncatechars:200|safe }}
+          </div>
+        </article>
+      {% empty %}
+        <p class="text-muted">Chưa có bài viết nào.</p>
+      {% endfor %}
+      
+    </section>
+  
+    <!-- 🟣 SIDEBAR PHẢI -->
+    <aside class="col-md-3">
+      {% include 'main/includes/sidebar-right.html' %}
+
+   
+ 
+    </aside>
+
+  </div>
+  
+</div>
+{% endblock %}
+

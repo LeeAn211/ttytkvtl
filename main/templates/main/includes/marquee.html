@@ -1,0 +1,15 @@
+<div class="container">
+  {% if running_texts %}
+  <div class="marquee-wrapper mx-n3">
+    <div class="marquee-content">
+      {# ✅ Lặp danh sách 2 lần để tạo hiệu ứng chạy vô hạn #}
+      {% for text in running_texts %}
+        <span class="marquee-item">{{ text.content }}</span>
+      {% endfor %}
+      {% for text in running_texts %}
+        <span class="marquee-item">{{ text.content }}</span>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>

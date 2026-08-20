@@ -1,0 +1,120 @@
+{% load static %}
+
+<!-- CSS -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v={{ now|date:'U' }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+{% for main_title, categories in schedule_groups.items %}
+  <div class="stat-box mb-2">
+    <h5 class="stat-title">{{ main_title }}</h5>
+
+    {% for cat in categories %}
+      <div class="p-1 mb-0 border-bottom">
+        <h6 class="fw-bold text-primary">{{ forloop.counter }}. {{ cat.title }}</h6>
+
+        <ul class="list-unstyled mb-0">
+          {% for item in cat.ordered_items %}
+            <li class="d-flex align-items-start mb-1">
+              <i class="fa-solid fa-angle-right me-1 text-primary mt-1"></i>
+              <span class="fw-bold {% if item.is_red %}text-danger{% else %}text-primary{% endif %}">
+                {{ item.label }}: {{ item.content }}
+              </span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  </div>
+{% endfor %}
+
+
+
+
+
+
+
+<!-- Sidebar phải -->
+<aside class="sidebar right-sidebar ">
+  {% for sidebar in right_sidebars %}
+    <section class="sidebar-box mb-2">
+
+      {# 🟠 Tiêu đề sidebar #}
+      {% if sidebar.title %}
+        <h6 class="sidebar-title mb-2 fw-bold">{{ sidebar.title }}</h6>
+      {% endif %}
+
+      {# 🟢 Hình đại diện #}
+      {% if sidebar.image %}
+        <div class="sidebar-image text-center mb-2">
+          {% if sidebar.url %}
+            <a href="{{ sidebar.url }}">
+              <img src="{{ sidebar.image.url }}"
+                   alt="{{ sidebar.title }}"
+                   class="img-fluid sidebar-img rounded shadow-sm">
+            </a>
+          {% else %}
+            <img src="{{ sidebar.image.url }}"
+                 alt="{{ sidebar.title }}"
+                 class="img-fluid sidebar-img rounded shadow-sm">
+          {% endif %}
+        </div>
+      {% endif %}
+      
+      {# 📂 Danh sách mục con + bài viết trong từng mục con (giống sidebar trái) #}
+      {% if sidebar.items.exists %}
+       <ul class="sidebar-subitems list-unstyled mb-0">
+  {% for item in sidebar.items.all %}
+    <li class="sidebar-subitem  mb-0">
+      <div class="sidebar-subitem-title fw-bold text-primary">
+
+        {% if item.posts.count > 1 %}
+          {# 👉 2 bài trở lên: CHỈ hiện tên mục con, KHÔNG có link #}
+          <a  class="text-decoration-none text-primary">
+          <i class="  fa-solid  fa-angle-right me-1 text-primary"></i> {{ item.title }}
+           </a>
+        {% else %}
+          {# 👉 Chỉ 1 bài: link trực tiếp tới bài viết #}
+          {% with only_post=item.posts.first %}
+            <a href="{{ only_post.get_absolute_url }}" class="text-decoration-none text-primary">
+              <i class="fa-solid fa-angle-right me-1 text-primary"></i> {{ item.title }}
+            </a>
+          {% endwith %}
+        {% endif %}
+
+      </div>
+
+      {% if item.posts.count > 1 %}
+        <ul class="list-unstyled">
+          {% for post in item.posts.all %}
+            <li class="sidebar-child-post mb-1">
+              <a href="{{ post.get_absolute_url }}" class="text-decoration-none text-primary">
+                <i class="fa-regular fa-circle-dot me-1 text-primary"></i> {{ post.title }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+    </li>
+  {% endfor %}
+</ul>
+      {% endif %}
+
+    </section>
+  {% empty %}
+    <p class="text-muted">Chưa có sidebar nào được thêm.</p>
+  {% endfor %}
+
+  <!-- 🟣 Thống kê lượt truy cập -->
+  <div class="stat-box">
+    <h6 class="stat-title">👀 Thống kê lượt truy cập</h6>
+    <div class="stat-content  fw-bold text-primary">
+      <p class=" text-decoration-none text-primary">
+        <i class="  fa-solid  fa-angle-right me-1 text-primary"></i>
+         Hôm nay: <strong>{{ today_views }}</strong> lượt</p>
+      <p class=" text-decoration-none text-primary">
+        <i class="  fa-solid  fa-angle-right me-1 text-primary"></i>
+        Tổng cộng: <strong>{{ total_views }}</strong> lượt</p>
+    </div>
+  </div>
+</aside>
